@@ -266,15 +266,28 @@
       }
     }
 
-    function obtenerPensamientoDevocional() {
-      const box = document.getElementById('reflexion');
-      box.style.display = 'block';
-      box.innerHTML = '<em>Generando pensamiento devocional...</em>';
+  async function obtenerPensamientoDevocional() {
+  const box = document.getElementById('reflexion');
+  box.style.display = 'block';
+  box.innerHTML = '<em>Cargando pensamiento devocional...</em>';
+
+  try {
+    // Consulta la API automática que creamos
+    const respuesta = await fetch('/api/daily-verse');
+    const datos = await respuesta.json();
+    
+    if (datos && datos.contenido) {
+      const versionActual = document.getElementById('tagVersion').innerText;
       
-      setTimeout(() => {
-        box.innerHTML = '<strong>Pensamiento Devocional:</strong> Antes de ir a la cruz, Jesús oró pidiéndole al Padre que guarde y aparte a sus seguidores del mal. La verdadera transformación de nuestra vida no depende de nuestras propias fuerzas o de ideas humanas, sino de conocer y obedecer lo que Dios ha dicho en su Palabra. Cuando leemos la Biblia con respeto y le permitimos guiar nuestras decisiones diarias, Dios nos moldea para vivir de una manera que le agrada.';
-      }, 700);
+      // Actualiza la imagen y el devocional con los datos de la API
+      document.getElementById('textoVersiculo').innerText = datos.contenido.traducciones[versionActual] || datos.contenido.traducciones['RVR1960'];
+      document.getElementById('refVersiculo').innerText = datos.contenido.referencia;
+      box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${datos.contenido.devocional}`;
     }
+  } catch (error) {
+    box.innerHTML = '<strong>Pensamiento Devocional:</strong> Antes de ir a la cruz, Jesús oró pidiéndole al Padre que guarde y aparte a sus seguidores del mal. La verdadera transformación de nuestra vida no depende de nuestras propias fuerzas o de ideas humanas, sino de conocer y obedecer lo que Dios ha dicho en su Palabra.';
+  }
+}
   </script>
 
 </body>
