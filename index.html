@@ -212,16 +212,34 @@
     let devocionalTexto = "";
 
     async function cargarPlacaDelDia() {
+      const imgElement = document.getElementById('placaImagen');
+      const heroContainer = document.getElementById('heroContainer');
+      
+      // Mostrar estado de carga visual
+      let loader = document.createElement('div');
+      loader.id = 'loaderTexto';
+      loader.style.cssText = 'position:absolute; color:#9ca3af; font-size:0.9rem; text-align:center; padding:20px; z-index:4;';
+      loader.innerHTML = '✨ Generando placa del día con IA...<br><span style="font-size:0.75rem; opacity:0.7;">Esto puede tomar unos segundos</span>';
+      heroContainer.appendChild(loader);
+
       try {
         const res = await fetch('/api/generar-placa');
         const data = await res.json();
         
         if (data.exito) {
-          document.getElementById('placaImagen').src = data.imagenPlacaUrl;
+          imgElement.src = data.imagenPlacaUrl;
           devocionalTexto = data.devocional;
         }
       } catch (err) {
         console.error("Error al cargar la placa:", err);
+        loader.innerHTML = '⚠️ Error al generar la placa. Recarga la página.';
+      } finally {
+        // Remover el mensaje de carga cuando la imagen esté lista
+        imgElement.onload = () => {
+          if (document.getElementById('loaderTexto')) {
+            document.getElementById('loaderTexto').remove();
+          }
+        };
       }
     }
 
@@ -237,7 +255,10 @@
 
     async function compartirPlaca() {
       const imgUrl = document.getElementById('placaImagen').src;
-      if (!imgUrl) return;
+      if (!imgUrl || imgUrl === window.location.href) {
+        alert('La placa aún se está generando, espera un momento.');
+        return;
+      }
 
       try {
         const response = await fetch(imgUrl);
