@@ -392,6 +392,20 @@
           document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
           
+          // Mantiene sincronizada la caja de reflexión si el usuario la tiene abierta
+          const box = document.getElementById('reflexion');
+          if (box.style.display === 'block') {
+            box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto}`;
+          }
+        } else {
+          document.getElementById('verseText').innerText = "No se pudo obtener el versículo.";
+        }
+      } catch (err) {
+        console.error("Error al cargar la placa:", err);
+        document.getElementById('verseText').innerText = "Error de conexión al cargar la placa.";
+      }
+    }
+          
           // Si el devocional estaba abierto, actualizarlo con la nueva versión
           const box = document.getElementById('reflexion');
           if (box.style.display === 'block') {
