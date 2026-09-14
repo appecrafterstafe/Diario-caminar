@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
     :root {
@@ -15,21 +16,15 @@
       --surface-dark: #141422;
       --accent-blue: #3b82f6;
       --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-bg: rgba(0, 0, 0, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.15);
       --text-main: #f9fafb;
-      --text-muted: #9ca3af;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
       display: flex;
@@ -49,8 +44,6 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
     }
 
     @media (min-width: 500px) {
@@ -65,52 +58,27 @@
 
     .top-bar {
       position: absolute;
-      top: env(safe-area-inset-top, 0);
+      top: 16px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 0 20px;
       z-index: 10;
     }
 
     .app-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
       text-transform: uppercase;
       letter-spacing: 2px;
       background: rgba(0, 0, 0, 0.4);
       padding: 6px 14px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-icon {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      color: var(--text-main);
-      font-size: 1.1rem;
-      cursor: pointer;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
-    .btn-icon:active {
-      transform: scale(0.9);
+      border: 1px solid var(--glass-border);
     }
 
     .hero-section {
@@ -120,14 +88,43 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #000;
-      overflow: hidden;
+      padding: 40px 30px;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
     }
 
-    .placa-imagen {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(3px);
+      z-index: 1;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .verse-text {
+      font-size: 1.45rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .verse-ref {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #93c5fd;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .bottom-section {
@@ -159,7 +156,7 @@
     }
 
     .btn-share {
-      background: var(--glass-bg);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--glass-border);
       color: #fff;
       padding: 14px 18px;
@@ -190,19 +187,21 @@
   <div class="app-container">
     <div class="top-bar">
       <span class="app-title">Palabra Diaria</span>
-      <div class="header-actions">
-        <button class="btn-icon" onclick="compartirPlaca()" title="Compartir Placa">🔗</button>
-      </div>
+      <button class="btn-share" style="padding: 10px; border-radius: 50%;" onclick="compartirPlaca()">🔗</button>
     </div>
 
-    <div class="hero-section" id="heroContainer">
-      <img id="placaImagen" src="" alt="Placa del día" class="placa-imagen" crossorigin="anonymous">
+    <div class="hero-section" id="heroSection">
+      <div class="hero-overlay"></div>
+      <div class="card-content" id="cardContent">
+        <p class="verse-text" id="verseText">Cargando versículo...</p>
+        <span class="verse-ref" id="verseRef"></span>
+      </div>
     </div>
 
     <div class="bottom-section">
       <div class="action-buttons-row">
         <button class="btn-devocional" onclick="toggleDevocional()">Pensamiento Devocional</button>
-        <button class="btn-share" onclick="compartirPlaca()">Compartir</button>
+        <button class="btn-share" onclick="compartirPlaca()">Compartir Placa</button>
       </div>
       <div id="reflexion" class="reflexion-box"></div>
     </div>
@@ -212,34 +211,19 @@
     let devocionalTexto = "";
 
     async function cargarPlacaDelDia() {
-      const imgElement = document.getElementById('placaImagen');
-      const heroContainer = document.getElementById('heroContainer');
-      
-      // Mostrar estado de carga visual
-      let loader = document.createElement('div');
-      loader.id = 'loaderTexto';
-      loader.style.cssText = 'position:absolute; color:#9ca3af; font-size:0.9rem; text-align:center; padding:20px; z-index:4;';
-      loader.innerHTML = '✨ Generando placa del día con IA...<br><span style="font-size:0.75rem; opacity:0.7;">Esto puede tomar unos segundos</span>';
-      heroContainer.appendChild(loader);
-
       try {
         const res = await fetch('/api/generar-placa');
         const data = await res.json();
         
         if (data.exito) {
-          imgElement.src = data.imagenPlacaUrl;
+          document.getElementById('verseText').innerText = `"${data.versiculo}"`;
+          document.getElementById('verseRef').innerText = data.referencia;
+          document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
         }
       } catch (err) {
         console.error("Error al cargar la placa:", err);
-        loader.innerHTML = '⚠️ Error al generar la placa. Recarga la página.';
-      } finally {
-        // Remover el mensaje de carga cuando la imagen esté lista
-        imgElement.onload = () => {
-          if (document.getElementById('loaderTexto')) {
-            document.getElementById('loaderTexto').remove();
-          }
-        };
+        document.getElementById('verseText').innerText = "No se pudo cargar el versículo de hoy.";
       }
     }
 
@@ -254,32 +238,29 @@
     }
 
     async function compartirPlaca() {
-      const imgUrl = document.getElementById('placaImagen').src;
-      if (!imgUrl || imgUrl === window.location.href) {
-        alert('La placa aún se está generando, espera un momento.');
-        return;
-      }
+      const elemento = document.getElementById('heroSection');
 
       try {
-        const response = await fetch(imgUrl);
-        const blob = await response.blob();
-        const file = new File([blob], 'placa-palabra-diaria.png', { type: 'image/png' });
+        const canvas = await html2canvas(elemento, { useCORS: true, scale: 2 });
+        canvas.toBlob(async (blob) => {
+          const file = new File([blob], 'placa-palabra-diaria.png', { type: 'image/png' });
 
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: 'Palabra Diaria',
-            text: 'Te comparto el versículo y mensaje de hoy.',
-            files: [file]
-          });
-        } else {
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'placa-palabra-diaria.png';
-          a.click();
-        }
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: 'Palabra Diaria',
+              text: 'Te comparto el versículo de hoy.',
+              files: [file]
+            });
+          } else {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'placa-palabra-diaria.png';
+            a.click();
+          }
+        }, 'image/png');
       } catch (err) {
-        console.error('Error al compartir la imagen:', err);
-        alert('No se pudo compartir la imagen directamente.');
+        console.error('Error al compartir la placa:', err);
+        alert('No se pudo generar la imagen para compartir.');
       }
     }
   </script>
