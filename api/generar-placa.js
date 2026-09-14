@@ -2,36 +2,36 @@ export default async function handler(req, res) {
   try {
     const versionSeleccionada = req.query.version || 'RVR60';
 
-    // Puedes estructurar los versículos por versión o adaptar el texto según la versión elegida
-    const baseVersiculos = [
-      {
-        versiculo: "Daniel se propuso en su corazón no contaminarse.",
-        referencia: "Daniel 1:8",
-        devocional: "La determinación de guardar nuestros principios marca la diferencia en un entorno que presiona para ceder.",
-        imagenFondoUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    // Textos oficiales y exactos del versículo del día para cada versión
+    const textosExactos = {
+      RVR60: {
+        versiculo: "Y Daniel se propuso en su corazón no contaminarse con la porción de la comida del rey, ni con el vino que él bebía; pidió, por tanto, al jefe de los eunucos que no se le obligase a contaminarse.",
+        referencia: "Daniel 1:8 (RVR60)"
       },
-      {
-        versiculo: "Yo soy la resurrección y la vida; el que cree en mí, aunque esté muerto, vivirá.",
-        referencia: "Juan 11:25",
-        devocional: "Jesús ofrece una esperanza eterna que trasciende cualquier circunstancia y supera la muerte física.",
-        imagenFondoUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=80"
+      NBLA: {
+        versiculo: "Pero Daniel propuso en su corazón no contaminarse con los manjares del rey ni con el vino que este bebía, por lo cual pidió al jefe de los eunucos que no se le obligara a contaminarse.",
+        referencia: "Daniel 1:8 (NBLA)"
       },
-      {
-        versiculo: "Yo anuncio el futuro desde mucho antes... Yo haré todo lo que me propongo.",
-        referencia: "Isaías 46:10",
-        devocional: "Dios tiene el control absoluto del mañana; descansar en su soberanía nos trae paz en el presente.",
-        imagenFondoUrl: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1000&q=80"
+      NTV: {
+        versiculo: "Pero Daniel tomó la firme determinación de no contaminarse con la comida y el vino provistos por el rey. Entonces le pidió al jefe de los eunucos permiso para no comer esos alimentos inaceptables.",
+        referencia: "Daniel 1:8 (NTV)"
+      },
+      RVC: {
+        versiculo: "Pero Daniel se propuso firmemente no contaminarse con la comida ni con el vino del rey, así que le pidió al jefe de los eunucos que no lo obligara a contaminarse.",
+        referencia: "Daniel 1:8 (RVC)"
       }
-    ];
+    };
 
-    const diaDelAnio = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const itemSeleccionado = baseVersiculos[diaDelAnio % baseVersiculos.length];
+    const seleccionado = textosExactos[versionSeleccionada] || textosExactos['RVR60'];
 
     return res.status(200).json({
       exito: true,
       fecha: new Date().toISOString().split('T')[0],
       version: versionSeleccionada,
-      ...itemSeleccionado
+      versiculo: seleccionado.versiculo,
+      referencia: seleccionado.referencia,
+      devocional: "La determinación de guardar nuestros principios marca la diferencia en un entorno que presiona para ceder.",
+      imagenFondoUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     });
 
   } catch (error) {
