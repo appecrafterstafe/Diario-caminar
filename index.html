@@ -205,6 +205,48 @@
       max-height: 140px;
       overflow-y: auto;
     }
+
+    /* Estilos del Modal de Configuración */
+    .config-modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 18, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .config-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .config-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .config-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .config-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      padding: 16px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   </style>
 </head>
 <body onload="cargarPlacaDelDia()">
@@ -232,6 +274,24 @@
         <button class="btn-share" onclick="compartirPlaca()">Compartir</button>
       </div>
       <div id="reflexion" class="reflexion-box"></div>
+    </div>
+
+    <!-- Menú de Configuración -->
+    <div id="configModal" class="config-modal">
+      <div class="config-header">
+        <span class="config-title">Configuración</span>
+        <button class="btn-icon" onclick="cerrarConfiguracion()">✕</button>
+      </div>
+      <div class="config-body">
+        <div class="config-item">
+          <span>Notificaciones diarias</span>
+          <input type="checkbox" id="notifCheck" checked onchange="guardarConfig()">
+        </div>
+        <div class="config-item">
+          <span>Versión de la App</span>
+          <span style="color: var(--text-muted); font-size: 0.9rem;">1.2.0</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -266,7 +326,16 @@
     }
 
     function abrirConfiguracion() {
-      alert('Panel de configuración.');
+      document.getElementById('configModal').style.display = 'flex';
+    }
+
+    function cerrarConfiguracion() {
+      document.getElementById('configModal').style.display = 'none';
+    }
+
+    function guardarConfig() {
+      const activo = document.getElementById('notifCheck').checked;
+      localStorage.setItem('notificaciones', activo);
     }
 
     async function compartirPlaca() {
