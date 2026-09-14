@@ -1,6 +1,9 @@
 export default async function handler(req, res) {
   try {
-    const versiculosDelMes = [
+    const versionSeleccionada = req.query.version || 'RVR60';
+
+    // Puedes estructurar los versículos por versión o adaptar el texto según la versión elegida
+    const baseVersiculos = [
       {
         versiculo: "Daniel se propuso en su corazón no contaminarse.",
         referencia: "Daniel 1:8",
@@ -22,11 +25,12 @@ export default async function handler(req, res) {
     ];
 
     const diaDelAnio = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const itemSeleccionado = versiculosDelMes[diaDelAnio % versiculosDelMes.length];
+    const itemSeleccionado = baseVersiculos[diaDelAnio % baseVersiculos.length];
 
     return res.status(200).json({
       exito: true,
       fecha: new Date().toISOString().split('T')[0],
+      version: versionSeleccionada,
       ...itemSeleccionado
     });
 
