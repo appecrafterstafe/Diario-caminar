@@ -207,7 +207,6 @@
       overflow-y: auto;
     }
 
-    /* Estilos del Modal de Configuración */
     .config-modal {
       position: absolute;
       inset: 0;
@@ -295,7 +294,7 @@
       <div id="reflexion" class="reflexion-box"></div>
     </div>
 
-    <!-- Menú de Configuración Completo -->
+    <!-- Menú de Configuración -->
     <div id="configModal" class="config-modal">
       <div class="config-header">
         <span class="config-title">Configuración</span>
@@ -305,12 +304,12 @@
         
         <div class="config-item">
           <label for="notifCheck">Notificaciones diarias</label>
-          <input type="checkbox" id="notifCheck" onchange="guardarConfig()">
+          <input type="checkbox" id="notifCheck" onchange="guardarYActualizarConfig()">
         </div>
 
         <div class="config-item">
           <label for="versionSelect">Versión de la Biblia</label>
-          <select id="versionSelect" onchange="guardarConfig()">
+          <select id="versionSelect" onchange="guardarYActualizarConfig()">
             <option value="RVR60">RVR60</option>
             <option value="NBLA">NBLA</option>
             <option value="NTV">NTV</option>
@@ -320,7 +319,7 @@
 
         <div class="config-item">
           <label for="horaInput">Hora de notificación</label>
-          <input type="time" id="horaInput" value="08:00" onchange="guardarConfig()">
+          <input type="time" id="horaInput" value="08:00" onchange="guardarYActualizarConfig()">
         </div>
 
       </div>
@@ -354,7 +353,7 @@
       }
     }
 
-    function guardarConfig() {
+    function guardarYActualizarConfig() {
       const notif = document.getElementById('notifCheck').checked;
       const version = document.getElementById('versionSelect').value;
       const hora = document.getElementById('horaInput').value;
@@ -363,13 +362,15 @@
       localStorage.setItem('versionBiblia', version);
       localStorage.setItem('horaNotificacion', hora);
 
-      // Opcional: Recargar el versículo si cambia la versión elegida
+      // Recarga inmediata aplicando la versión seleccionada
       cargarPlacaDelDia();
     }
 
     async function cargarPlacaDelDia() {
       try {
         const versionActual = localStorage.getItem('versionBiblia') || 'RVR60';
+        document.getElementById('verseText').innerText = "Cargando versículo...";
+        
         const res = await fetch(`/api/generar-placa?version=${versionActual}`);
         const data = await res.json();
         
@@ -378,10 +379,12 @@
           document.getElementById('verseRef').innerText = `${data.referencia} (${versionActual})`;
           document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
+        } else {
+          document.getElementById('verseText').innerText = "No se pudo obtener el versículo.";
         }
       } catch (err) {
         console.error("Error al cargar la placa:", err);
-        document.getElementById('verseText').innerText = "No se pudo cargar el versículo de hoy.";
+        document.getElementById('verseText').innerText = "Error de conexión al cargar la placa.";
       }
     }
 
