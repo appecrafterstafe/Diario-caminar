@@ -63,7 +63,6 @@
       }
     }
 
-    /* Header Flotante */
     .top-bar {
       position: absolute;
       top: env(safe-area-inset-top, 0);
@@ -82,7 +81,7 @@
       color: rgba(255, 255, 255, 0.8);
       text-transform: uppercase;
       letter-spacing: 2px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       padding: 6px 14px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
@@ -95,7 +94,7 @@
     }
 
     .btn-icon {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(12px);
       color: var(--text-main);
@@ -112,87 +111,29 @@
 
     .btn-icon:active {
       transform: scale(0.9);
-      background: rgba(255, 255, 255, 0.25);
     }
 
-    /* Imagen Hero con Degradado Integrado */
     .hero-section {
       flex: 1;
       position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 24px;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      overflow: hidden;
     }
 
-    .bg-image {
-      position: absolute;
-      inset: 0;
+    .placa-imagen {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: 1;
     }
 
-    .overlay-gradient {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg, 
-        rgba(10,10,18,0.2) 0%, 
-        rgba(10,10,18,0.6) 50%, 
-        var(--surface-dark) 100%
-      );
-      z-index: 2;
-    }
-
-    .versiculo-content {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .versiculo-imagen {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #ffffff;
-      line-height: 1.45;
-      margin-bottom: 14px;
-      text-shadow: 0 4px 16px rgba(0,0,0,0.8);
-    }
-
-    .referencia-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .referencia-imagen {
-      font-size: 0.9rem;
-      color: #60a5fa;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .version-tag {
-      font-size: 0.7rem;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      color: #e5e7eb;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Botones de Acción e Inferior */
     .bottom-section {
       position: relative;
       z-index: 3;
-      padding: 0 20px 24px 20px;
+      padding: 16px 20px 24px 20px;
       background: var(--surface-dark);
       display: flex;
       flex-direction: column;
@@ -209,242 +150,115 @@
       background: var(--accent-gradient);
       color: #ffffff;
       border: none;
-      padding: 16px;
-      border-radius: 18px;
+      padding: 14px;
+      border-radius: 16px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
-      transition: transform 0.15s ease, box-shadow 0.2s ease;
-    }
-
-    .btn-devocional:active {
-      transform: scale(0.97);
     }
 
     .btn-share {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       color: #fff;
-      padding: 16px 20px;
-      border-radius: 18px;
+      padding: 14px 18px;
+      border-radius: 16px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
       backdrop-filter: blur(10px);
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
-    .btn-share:active {
-      transform: scale(0.97);
-      background: rgba(255, 255, 255, 0.2);
     }
 
     .reflexion-box {
-      padding: 18px;
+      padding: 16px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-left: 4px solid var(--accent-blue);
-      border-radius: 16px;
-      font-size: 0.92rem;
-      line-height: 1.6;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      line-height: 1.5;
       color: #d1d5db;
       display: none;
-      max-height: 160px;
+      max-height: 140px;
       overflow-y: auto;
-      animation: slideUp 0.3s ease-out forwards;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Modal de Configuración Native Style */
-    .config-panel {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 10, 18, 0.95);
-      backdrop-filter: blur(20px);
-      z-index: 20;
-      padding: 40px 24px 24px 24px;
-      animation: fadeIn 0.25s ease-out forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .config-panel h3 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 14px;
-    }
-
-    .form-group {
-      margin-bottom: 22px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .form-group select, .form-group input {
-      width: 100%;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      color: #fff;
-      font-size: 1rem;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .btn-guardar {
-      background: var(--accent-gradient);
-      color: #fff;
-      border: none;
-      padding: 16px;
-      border-radius: 16px;
-      width: 100%;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 20px;
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
     }
   </style>
 </head>
-<body>
+<body onload="cargarPlacaDelDia()">
 
   <div class="app-container">
-    <!-- Header Flotante -->
     <div class="top-bar">
       <span class="app-title">Palabra Diaria</span>
       <div class="header-actions">
-        <button class="btn-icon" onclick="compartirVersiculo()" title="Compartir">🔗</button>
-        <button class="btn-icon" onclick="abrirConfiguracion()" title="Configuración">⚙️</button>
+        <button class="btn-icon" onclick="compartirPlaca()" title="Compartir Placa">🔗</button>
       </div>
     </div>
 
-    <!-- Sección Hero / Imagen -->
-    <div class="hero-section">
-      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Fondo" class="bg-image">
-      <div class="overlay-gradient"></div>
-
-      <div class="versiculo-content">
-        <p class="versiculo-imagen" id="textoVersiculo">"Santifícalos en tu verdad; tu palabra es verdad."</p>
-        <div class="referencia-wrapper">
-          <span class="referencia-imagen" id="refVersiculo">Juan 17:17</span>
-          <span class="version-tag" id="tagVersion">RVR1960</span>
-        </div>
-      </div>
+    <div class="hero-section" id="heroContainer">
+      <img id="placaImagen" src="" alt="Placa del día" class="placa-imagen" crossorigin="anonymous">
     </div>
 
-    <!-- Sección Inferior de Acciones -->
     <div class="bottom-section">
       <div class="action-buttons-row">
-        <button class="btn-devocional" onclick="obtenerPensamientoDevocional()">Pensamiento Devocional</button>
-        <button class="btn-share" onclick="compartirVersiculo()">
-          <span>Compartir</span>
-        </button>
+        <button class="btn-devocional" onclick="toggleDevocional()">Pensamiento Devocional</button>
+        <button class="btn-share" onclick="compartirPlaca()">Compartir</button>
       </div>
-      
       <div id="reflexion" class="reflexion-box"></div>
-    </div>
-
-    <!-- Modal Ajustes -->
-    <div id="panelConfig" class="config-panel">
-      <h3>Ajustes</h3>
-      
-      <div class="form-group">
-        <label for="selectVersion">Traducción Bíblica</label>
-        <select id="selectVersion">
-          <option value="RVR1960">Reina-Valera 1960 (RVR1960)</option>
-          <option value="NBLA">Nueva Biblia de las Américas (NBLA)</option>
-          <option value="NTV">Nueva Traducción Viviente (NTV)</option>
-          <option value="RVC">Reina Valera Contemporánea (RVC)</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="inputHorario">Notificación Diaria</label>
-        <input type="time" id="inputHorario" value="07:00">
-      </div>
-
-      <button class="btn-guardar" onclick="guardarConfiguracion()">Guardar cambios</button>
     </div>
   </div>
 
   <script>
-    function abrirConfiguracion() {
-      document.getElementById('panelConfig').style.display = 'block';
-    }
+    let devocionalTexto = "";
 
-    function guardarConfiguracion() {
-      const version = document.getElementById('selectVersion').value;
-      document.getElementById('tagVersion').innerText = version;
-      document.getElementById('panelConfig').style.display = 'none';
-
-      if ('Notification' in window && Notification.permission !== 'granted') {
-        Notification.requestPermission();
+    async function cargarPlacaDelDia() {
+      try {
+        const res = await fetch('/api/generar-placa');
+        const data = await res.json();
+        
+        if (data.exito) {
+          document.getElementById('placaImagen').src = data.imagenPlacaUrl;
+          devocionalTexto = data.devocional;
+        }
+      } catch (err) {
+        console.error("Error al cargar la placa:", err);
       }
-      obtenerPensamientoDevocional();
     }
 
-    async function obtenerPensamientoDevocional() {
+    function toggleDevocional() {
       const box = document.getElementById('reflexion');
-      box.style.display = 'block';
-      box.innerHTML = '<em>Cargando devocional...</em>';
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+      } else {
+        box.style.display = 'block';
+        box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto || 'Cargando mensaje...'}`;
+      }
+    }
+
+    async function compartirPlaca() {
+      const imgUrl = document.getElementById('placaImagen').src;
+      if (!imgUrl) return;
 
       try {
-        const respuesta = await fetch('/api/daily-verse');
-        const datos = await respuesta.json();
-        
-        if (datos && datos.contenido) {
-          const versionActual = document.getElementById('tagVersion').innerText;
-          document.getElementById('textoVersiculo').innerText = datos.contenido.traducciones[versionActual] || datos.contenido.traducciones['RVR1960'];
-          document.getElementById('refVersiculo').innerText = datos.contenido.referencia;
-          box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${datos.contenido.devocional}`;
-        }
-      } catch (error) {
-        box.innerHTML = '<strong>Pensamiento Devocional:</strong> Antes de ir a la cruz, Jesús oró pidiéndole al Padre que guarde y aparte a sus seguidores del mal. La verdadera transformación no depende de nuestras propias fuerzas, sino de conocer y obedecer lo que Dios ha dicho.';
-      }
-    }
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'placa-palabra-diaria.png', { type: 'image/png' });
 
-    async function compartirVersiculo() {
-      const texto = document.getElementById('textoVersiculo').innerText;
-      const referencia = document.getElementById('refVersiculo').innerText;
-      const version = document.getElementById('tagVersion').innerText;
-      
-      const mensaje = `${texto}\n— ${referencia} (${version})\n\nCompartido desde Palabra Diaria`;
-
-      if (navigator.share) {
-        try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
-            title: 'Versículo del Día',
-            text: mensaje,
-            url: window.location.href
+            title: 'Palabra Diaria',
+            text: 'Te comparto el versículo y mensaje de hoy.',
+            files: [file]
           });
-        } catch (err) {
-          console.log('Compartir cancelado');
+        } else {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'placa-palabra-diaria.png';
+          a.click();
         }
-      } else {
-        // Fallback para navegadores que no soportan Web Share API
-        navigator.clipboard.writeText(mensaje);
-        alert('¡Versículo copiado al portapapeles!');
+      } catch (err) {
+        console.error('Error al compartir la imagen:', err);
+        alert('No se pudo compartir la imagen directamente.');
       }
     }
   </script>
