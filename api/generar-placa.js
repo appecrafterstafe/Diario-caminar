@@ -2,7 +2,6 @@ export default async function handler(req, res) {
   try {
     const versionSeleccionada = req.query.version || 'RVR60';
 
-    // Banco central con los versículos según cada versión y su reflexión única compartida
     const bancoDiario = [
       {
         id: 1,
@@ -13,7 +12,8 @@ export default async function handler(req, res) {
           NBLA: "Pero Daniel propuso en su corazón no contaminarse con los manjares del rey ni con el vino que este bebía, por lo cual pidió al jefe de los eunucos que no se le obligara a contaminarse.",
           NTV: "Pero Daniel tomó la firme determinación de no contaminarse con la comida y el vino provistos por el rey. Entonces le pidió al jefe de los eunucos permiso para no comer esos alimentos inaceptables.",
           RVC: "Pero Daniel se propuso firmemente no contaminarse con la comida ni con el vino del rey, así que le pidió al jefe de los eunucos que no lo obligara a contaminarse."
-        }
+        },
+        referencia: "Daniel 1:8"
       },
       {
         id: 2,
@@ -24,7 +24,8 @@ export default async function handler(req, res) {
           NBLA: "Lámpara es a mis pies Tu palabra, y luz para mi camino.",
           NTV: "Tu palabra es una lámpara que guía mis pies y una luz para mi camino.",
           RVC: "Tu palabra es una lámpara a mis pies; ¡es la luz que alumbra mi camino!"
-        }
+        },
+        referencia: "Salmos 119:105"
       }
     ];
 
@@ -32,26 +33,15 @@ export default async function handler(req, res) {
     const inicioAnio = new Date(ahora.getFullYear(), 0, 0);
     const diaDelAnio = Math.floor((ahora - inicioAnio) / (1000 * 60 * 60 * 24));
     
-    // Selecciona el devocional diario de forma cíclica
     const itemDelDia = bancoDiario[diaDelAnio % bancoDiario.length];
-
-    // Extrae el texto del versículo según la versión solicitada (con fallback a RVR60 si no existe)
     const textoVersiculo = itemDelDia.versiculos[versionSeleccionada] || itemDelDia.versiculos['RVR60'];
-
-    // Referencias correspondientes según el ID del versículo actual
-    const referenciasPorId = {
-      1: "Daniel 1:8",
-      2: "Salmos 119:105"
-    };
-
-    const referenciaBase = referenciasPorId[itemDelDia.id] || "Palabra Diaria";
 
     return res.status(200).json({
       exito: true,
       fecha: ahora.toISOString().split('T')[0],
       version: versionSeleccionada,
       versiculo: textoVersiculo,
-      referencia: `${referenciaBase} • ${versionSeleccionada}`,
+      referencia: `${itemDelDia.referencia} • ${versionSeleccionada}`,
       devocional: itemDelDia.reflexion,
       imagenFondoUrl: itemDelDia.imagenFondoUrl
     });
