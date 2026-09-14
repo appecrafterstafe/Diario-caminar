@@ -81,6 +81,31 @@
       border: 1px solid var(--glass-border);
     }
 
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      font-size: 1rem;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.92);
+    }
+
     .hero-section {
       flex: 1;
       position: relative;
@@ -187,7 +212,10 @@
   <div class="app-container">
     <div class="top-bar">
       <span class="app-title">Palabra Diaria</span>
-      <button class="btn-share" style="padding: 10px; border-radius: 50%;" onclick="compartirPlaca()">🔗</button>
+      <div class="header-actions">
+        <button class="btn-icon" onclick="abrirConfiguracion()" title="Configuración">⚙️</button>
+        <button class="btn-icon" onclick="compartirPlaca()" title="Compartir Placa">🔗</button>
+      </div>
     </div>
 
     <div class="hero-section" id="heroSection">
@@ -201,7 +229,7 @@
     <div class="bottom-section">
       <div class="action-buttons-row">
         <button class="btn-devocional" onclick="toggleDevocional()">Pensamiento Devocional</button>
-        <button class="btn-share" onclick="compartirPlaca()">Compartir Placa</button>
+        <button class="btn-share" onclick="compartirPlaca()">Compartir</button>
       </div>
       <div id="reflexion" class="reflexion-box"></div>
     </div>
@@ -235,6 +263,10 @@
         box.style.display = 'block';
         box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto || 'Cargando mensaje...'}`;
       }
+    }
+
+    function abrirConfiguracion() {
+      alert('Panel de configuración.');
     }
 
     async function compartirPlaca() {
