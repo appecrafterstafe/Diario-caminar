@@ -2,469 +2,233 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Palabra Diaria</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diario Caminar</title>
   <style>
     :root {
-      --bg-dark: #0a0a12;
-      --surface-dark: #141422;
-      --accent-blue: #3b82f6;
-      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-      --glass-bg: rgba(0, 0, 0, 0.55);
-      --glass-border: rgba(255, 255, 255, 0.15);
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
+      --primary-color: #2c3e50;
+      --accent-color: #2980b9;
+      --bg-color: #f5f6fa;
+      --text-color: #333333;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      min-height: 100dvh;
-    }
-
-    .app-container {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      max-width: 480px;
-      background: var(--surface-dark);
+      background-color: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      min-height: 100vh;
     }
 
-    @media (min-width: 500px) {
-      .app-container {
-        height: 92vh;
-        max-height: 860px;
-        border-radius: 36px;
-        border: 1px solid var(--glass-border);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-      }
-    }
-
-    .top-bar {
-      position: absolute;
-      top: 16px;
-      left: 0;
-      right: 0;
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .app-title {
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.9);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 14px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
+    header h1 {
+      font-size: 1.5rem;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-icon {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--glass-border);
-      color: var(--text-main);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+    .selector-container {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    select {
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      background-color: white;
+      font-size: 0.9rem;
       cursor: pointer;
-      backdrop-filter: blur(10px);
-      font-size: 1rem;
-      transition: transform 0.1s ease;
     }
 
-    .btn-icon:active {
-      transform: scale(0.92);
-    }
-
-    .hero-section {
+    main {
       flex: 1;
-      position: relative;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px 30px;
-      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero-card {
+      width: 100%;
+      max-width: 650px;
       background-size: cover;
       background-position: center;
-      transition: background-image 0.5s ease-in-out;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 400px;
     }
 
     .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
-      backdrop-filter: blur(2px);
-      z-index: 1;
-    }
-
-    .card-content {
-      position: relative;
-      z-index: 2;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.1) 100%);
+      padding: 2.5rem 2rem 2rem 2rem;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      align-items: center;
-      max-width: 380px;
+      gap: 1rem;
     }
 
     .verse-text {
-      font-size: 1.35rem;
-      font-weight: 700;
-      line-height: 1.45;
-      color: #ffffff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+      font-size: 1.25rem;
+      line-height: 1.6;
+      font-weight: 400;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
 
     .verse-ref {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #93c5fd;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 4px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+      font-weight: bold;
+      color: #3498db;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
     }
 
-    .bottom-section {
-      position: relative;
-      z-index: 3;
-      padding: 16px 20px 24px 20px;
-      background: var(--surface-dark);
+    .actions-bar {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      border-top: 1px solid var(--glass-border);
+      gap: 1rem;
+      margin-top: 0.5rem;
     }
 
-    .action-buttons-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-devocional {
-      flex: 1;
-      background: var(--accent-gradient);
-      color: #ffffff;
+    button.btn {
+      background-color: var(--accent-color);
+      color: white;
       border: none;
-      padding: 14px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 0.92rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
-      transition: opacity 0.2s;
-    }
-
-    .btn-devocional:active { opacity: 0.9; }
-
-    .btn-share {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      color: #fff;
-      padding: 14px 18px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-    }
-
-    .reflexion-box {
-      padding: 16px;
-      background: rgba(20, 20, 34, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-left: 4px solid var(--accent-blue);
-      border-radius: 14px;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: #e5e7eb;
-      display: none;
-      max-height: 160px;
-      overflow-y: auto;
-      text-align: left;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
-    .config-modal {
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 10, 18, 0.96);
-      backdrop-filter: blur(20px);
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-      padding: 24px;
-    }
-
-    .config-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .config-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .config-body {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      overflow-y: auto;
-      padding-bottom: 20px;
-    }
-
-    .config-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--glass-border);
-      padding: 16px;
-      border-radius: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .config-item label {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--text-main);
-    }
-
-    .config-item select, .config-item input[type="time"] {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--glass-border);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-family: inherit;
       font-size: 0.9rem;
-      outline: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    button.btn:hover {
+      background-color: #1f618d;
+    }
+
+    .devocional-box {
+      background: rgba(255, 255, 255, 0.95);
+      color: #222;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #7f8c8d;
     }
   </style>
 </head>
-<body onload="inicializarApp()">
+<body>
 
-  <div class="app-container">
-    <div class="top-bar">
-      <span class="app-title">Palabra Diaria</span>
-      <div class="header-actions">
-        <button class="btn-icon" onclick="abrirConfiguracion()" title="Configuración">⚙️</button>
-        <button class="btn-icon" onclick="compartirPlaca()" title="Compartir Placa">🔗</button>
-      </div>
+  <header>
+    <h1>Diario Caminar</h1>
+    <div class="selector-container">
+      <label for="versionSelect">Versión:</label>
+      <select id="versionSelect" onchange="cambiarVersion()">
+        <option value="RVR60">RVR60</option>
+        <option value="NBLA">NBLA</option>
+        <option value="NTV">NTV</option>
+        <option value="RVC">RVC</option>
+      </select>
     </div>
+  </header>
 
-    <div class="hero-section" id="heroSection">
-      <div class="hero-overlay"></div>
-      <div class="card-content" id="cardContent">
-        <p class="verse-text" id="verseText">Cargando versículo...</p>
-        <span class="verse-ref" id="verseRef"></span>
-      </div>
-    </div>
-
-    <div class="bottom-section">
-      <div class="action-buttons-row">
-        <button class="btn-devocional" onclick="toggleDevocional()">Pensamiento Devocional</button>
-        <button class="btn-share" onclick="compartirPlaca()">Compartir</button>
-      </div>
-      <div id="reflexion" class="reflexion-box"></div>
-    </div>
-
-    <!-- Menú de Configuración -->
-    <div id="configModal" class="config-modal">
-      <div class="config-header">
-        <span class="config-title">Configuración</span>
-        <button class="btn-icon" onclick="cerrarConfiguracion()">✕</button>
-      </div>
-      <div class="config-body">
+  <main>
+    <div class="hero-card" id="heroSection">
+      <div class="hero-overlay">
+        <div class="verse-text" id="verseText">Cargando versículo del día...</div>
+        <div class="verse-ref" id="verseRef"></div>
         
-        <div class="config-item">
-          <label for="notifCheck">Notificaciones diarias</label>
-          <input type="checkbox" id="notifCheck" onchange="guardarYActualizarConfig()">
+        <div class="actions-bar">
+          <button class="btn" onclick="toggleReflexion()">Ver Devocional</button>
         </div>
 
-        <div class="config-item">
-          <label for="versionSelect">Versión de la Biblia</label>
-          <select id="versionSelect" onchange="guardarYActualizarConfig()">
-            <option value="RVR60">RVR60</option>
-            <option value="NBLA">NBLA</option>
-            <option value="NTV">NTV</option>
-            <option value="RVC">RVC</option>
-          </select>
-        </div>
-
-        <div class="config-item">
-          <label for="horaInput">Hora de notificación</label>
-          <input type="time" id="horaInput" value="08:00" onchange="guardarYActualizarConfig()">
-        </div>
-
+        <div class="devocional-box" id="reflexion"></div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Diario Caminar • Todos los derechos reservados
+  </footer>
 
   <script>
     let devocionalTexto = "";
 
-    function inicializarApp() {
-      cargarConfiguracionGuardada();
-      cargarPlacaDelDia();
-    }
-
-    function cargarConfiguracionGuardada() {
-      const notif = localStorage.getItem('notificaciones');
-      if (notif !== null) {
-        document.getElementById('notifCheck').checked = (notif === 'true');
-      } else {
-        document.getElementById('notifCheck').checked = true;
-      }
-
-      const version = localStorage.getItem('versionBiblia');
-      if (version) {
-        document.getElementById('versionSelect').value = version;
-      }
-
-      const hora = localStorage.getItem('horaNotificacion');
-      if (hora) {
-        document.getElementById('horaInput').value = hora;
-      }
-    }
-
-    function guardarYActualizarConfig() {
-      const notif = document.getElementById('notifCheck').checked;
-      const version = document.getElementById('versionSelect').value;
-      const hora = document.getElementById('horaInput').value;
-
-      localStorage.setItem('notificaciones', notif);
-      localStorage.setItem('versionBiblia', version);
-      localStorage.setItem('horaNotificacion', hora);
-
-      cargarPlacaDelDia();
-    }
-
     async function cargarPlacaDelDia() {
       try {
         const versionActual = localStorage.getItem('versionBiblia') || 'RVR60';
-        document.getElementById('verseText').innerText = "Cargando versículo...";
-        document.getElementById('verseRef').innerText = "";
+        document.getElementById('versionSelect').value = versionActual;
         
+        document.getElementById('verseText').innerText = "Cargando...";
+        document.getElementById('verseRef').innerText = "";
+
         const res = await fetch(`/api/generar-placa?version=${versionActual}`);
         const data = await res.json();
-        
+
         if (data.exito) {
           document.getElementById('verseText').innerText = `"${data.versiculo}"`;
           document.getElementById('verseRef').innerText = data.referencia;
           document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
-          
-          // Mantiene sincronizada la caja de reflexión si el usuario la tiene abierta
+
           const box = document.getElementById('reflexion');
           if (box.style.display === 'block') {
             box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto}`;
           }
         } else {
-          document.getElementById('verseText').innerText = "No se pudo obtener el versículo.";
+          document.getElementById('verseText').innerText = "No se pudo cargar el contenido.";
         }
       } catch (err) {
-        console.error("Error al cargar la placa:", err);
-        document.getElementById('verseText').innerText = "Error de conexión al cargar la placa.";
-      }
-    }
-          
-          // Si el devocional estaba abierto, actualizarlo con la nueva versión
-          const box = document.getElementById('reflexion');
-          if (box.style.display === 'block') {
-            box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto}`;
-          }
-        } else {
-          document.getElementById('verseText').innerText = "No se pudo obtener el versículo.";
-        }
-      } catch (err) {
-        console.error("Error al cargar la placa:", err);
-        document.getElementById('verseText').innerText = "Error de conexión al cargar la placa.";
+        console.error("Error:", err);
+        document.getElementById('verseText').innerText = "Error de conexión con el servidor.";
       }
     }
 
-    function toggleDevocional() {
+    function cambiarVersion() {
+      const nuevaVersion = document.getElementById('versionSelect').value;
+      localStorage.setItem('versionBiblia', nuevaVersion);
+      cargarPlacaDelDia();
+    }
+
+    function toggleReflexion() {
       const box = document.getElementById('reflexion');
       if (box.style.display === 'block') {
         box.style.display = 'none';
       } else {
+        box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto}`;
         box.style.display = 'block';
-        box.innerHTML = `<strong>Pensamiento Devocional:</strong> ${devocionalTexto || 'Cargando mensaje...'}`;
       }
     }
 
-    function abrirConfiguracion() {
-      document.getElementById('configModal').style.display = 'flex';
-    }
-
-    function cerrarConfiguracion() {
-      document.getElementById('configModal').style.display = 'none';
-    }
-
-    async function compartirPlaca() {
-      const elemento = document.getElementById('heroSection');
-
-      try {
-        const canvas = await html2canvas(elemento, { useCORS: true, scale: 2 });
-        canvas.toBlob(async (blob) => {
-          const file = new File([blob], 'placa-palabra-diaria.png', { type: 'image/png' });
-
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              title: 'Palabra Diaria',
-              text: 'Te comparto el versículo de hoy.',
-              files: [file]
-            });
-          } else {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'placa-palabra-diaria.png';
-            a.click();
-          }
-        }, 'image/png');
-      } catch (err) {
-        console.error('Error al compartir la placa:', err);
-        alert('No se pudo generar la imagen para compartir.');
-      }
-    }
+    // Inicializar al cargar la página
+    window.onload = cargarPlacaDelDia;
   </script>
-
 </body>
 </html>
