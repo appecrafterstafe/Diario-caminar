@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     ];
 
     const ahora = new Date();
-    const inicioAnio = new Date(ahora.getFullYear(), 0, 0);
+    const inicioAnio = new Date(ahora.getFullYear(), 0, 1);
     const diaDelAnio = Math.floor((ahora - inicioAnio) / (1000 * 60 * 60 * 24));
     
     const itemDelDia = bancoDiario[diaDelAnio % bancoDiario.length];
