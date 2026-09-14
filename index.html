@@ -376,7 +376,7 @@
         
         if (data.exito) {
           document.getElementById('verseText').innerText = `"${data.versiculo}"`;
-          document.getElementById('verseRef').innerText = `${data.referencia} (${versionActual})`;
+          document.getElementById('verseRef').innerText = data.referencia;
           document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
         } else {
