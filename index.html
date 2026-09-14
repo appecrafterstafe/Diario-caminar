@@ -19,6 +19,7 @@
       --glass-bg: rgba(0, 0, 0, 0.55);
       --glass-border: rgba(255, 255, 255, 0.15);
       --text-main: #f9fafb;
+      --text-muted: #9ca3af;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -210,7 +211,7 @@
     .config-modal {
       position: absolute;
       inset: 0;
-      background: rgba(10, 10, 18, 0.95);
+      background: rgba(10, 10, 18, 0.96);
       backdrop-filter: blur(20px);
       z-index: 100;
       display: none;
@@ -222,11 +223,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .config-title {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: #fff;
     }
@@ -234,8 +235,9 @@
     .config-body {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       overflow-y: auto;
+      padding-bottom: 20px;
     }
 
     .config-item {
@@ -247,9 +249,26 @@
       justify-content: space-between;
       align-items: center;
     }
+
+    .config-item label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .config-item select, .config-item input[type="time"] {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
   </style>
 </head>
-<body onload="cargarPlacaDelDia()">
+<body onload="inicializarApp()">
 
   <div class="app-container">
     <div class="top-bar">
@@ -276,21 +295,34 @@
       <div id="reflexion" class="reflexion-box"></div>
     </div>
 
-    <!-- Menú de Configuración -->
+    <!-- Menú de Configuración Completo -->
     <div id="configModal" class="config-modal">
       <div class="config-header">
         <span class="config-title">Configuración</span>
         <button class="btn-icon" onclick="cerrarConfiguracion()">✕</button>
       </div>
       <div class="config-body">
+        
         <div class="config-item">
-          <span>Notificaciones diarias</span>
-          <input type="checkbox" id="notifCheck" checked onchange="guardarConfig()">
+          <label for="notifCheck">Notificaciones diarias</label>
+          <input type="checkbox" id="notifCheck" onchange="guardarConfig()">
         </div>
+
         <div class="config-item">
-          <span>Versión de la App</span>
-          <span style="color: var(--text-muted); font-size: 0.9rem;">1.2.0</span>
+          <label for="versionSelect">Versión de la Biblia</label>
+          <select id="versionSelect" onchange="guardarConfig()">
+            <option value="RVR60">RVR60</option>
+            <option value="NBLA">NBLA</option>
+            <option value="NTV">NTV</option>
+            <option value="RVC">RVC</option>
+          </select>
         </div>
+
+        <div class="config-item">
+          <label for="horaInput">Hora de notificación</label>
+          <input type="time" id="horaInput" value="08:00" onchange="guardarConfig()">
+        </div>
+
       </div>
     </div>
   </div>
@@ -298,14 +330,52 @@
   <script>
     let devocionalTexto = "";
 
+    function inicializarApp() {
+      cargarConfiguracionGuardada();
+      cargarPlacaDelDia();
+    }
+
+    function cargarConfiguracionGuardada() {
+      const notif = localStorage.getItem('notificaciones');
+      if (notif !== null) {
+        document.getElementById('notifCheck').checked = (notif === 'true');
+      } else {
+        document.getElementById('notifCheck').checked = true;
+      }
+
+      const version = localStorage.getItem('versionBiblia');
+      if (version) {
+        document.getElementById('versionSelect').value = version;
+      }
+
+      const hora = localStorage.getItem('horaNotificacion');
+      if (hora) {
+        document.getElementById('horaInput').value = hora;
+      }
+    }
+
+    function guardarConfig() {
+      const notif = document.getElementById('notifCheck').checked;
+      const version = document.getElementById('versionSelect').value;
+      const hora = document.getElementById('horaInput').value;
+
+      localStorage.setItem('notificaciones', notif);
+      localStorage.setItem('versionBiblia', version);
+      localStorage.setItem('horaNotificacion', hora);
+
+      // Opcional: Recargar el versículo si cambia la versión elegida
+      cargarPlacaDelDia();
+    }
+
     async function cargarPlacaDelDia() {
       try {
-        const res = await fetch('/api/generar-placa');
+        const versionActual = localStorage.getItem('versionBiblia') || 'RVR60';
+        const res = await fetch(`/api/generar-placa?version=${versionActual}`);
         const data = await res.json();
         
         if (data.exito) {
           document.getElementById('verseText').innerText = `"${data.versiculo}"`;
-          document.getElementById('verseRef').innerText = data.referencia;
+          document.getElementById('verseRef').innerText = `${data.referencia} (${versionActual})`;
           document.getElementById('heroSection').style.backgroundImage = `url('${data.imagenFondoUrl}')`;
           devocionalTexto = data.devocional;
         }
@@ -331,11 +401,6 @@
 
     function cerrarConfiguracion() {
       document.getElementById('configModal').style.display = 'none';
-    }
-
-    function guardarConfig() {
-      const activo = document.getElementById('notifCheck').checked;
-      localStorage.setItem('notificaciones', activo);
     }
 
     async function compartirPlaca() {
