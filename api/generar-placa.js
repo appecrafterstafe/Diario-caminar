@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
   try {
-    // Lista de versículos y fondos que rotan automáticamente
     const versiculosDelMes = [
       {
         versiculo: "Daniel se propuso en su corazón no contaminarse.",
@@ -22,7 +21,6 @@ export default async function handler(req, res) {
       }
     ];
 
-    // Selecciona un versículo diferente cada día basándose en la fecha actual
     const diaDelAnio = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
     const itemSeleccionado = versiculosDelMes[diaDelAnio % versiculosDelMes.length];
 
